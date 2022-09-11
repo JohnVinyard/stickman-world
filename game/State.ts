@@ -1,7 +1,7 @@
 import { World, Heightfield, Body, Plane } from 'cannon';
 
 export default class GameState {
-    
+
     public readonly world: World;
     public readonly ground: Body;
 
