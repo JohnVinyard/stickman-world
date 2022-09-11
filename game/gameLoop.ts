@@ -5,7 +5,9 @@ import {
   BoxGeometry,
   MeshBasicMaterial,
   Mesh,
+  PlaneGeometry,
 } from "three";
+import GameState from "./State";
 
 let GAME_LOOP_STARTED = false;
 
@@ -35,19 +37,65 @@ export const startGameLoop = (
   }
   document.body.prepend(renderer.domElement);
 
-  const geometry = new BoxGeometry(1, 1, 1);
-  const material = new MeshBasicMaterial({ color: 0x00ffff });
-  const cube = new Mesh(geometry, material);
-  scene.add(cube);
+  const state = new GameState();
+
+  const cubes: Mesh<BoxGeometry, MeshBasicMaterial>[] = [];
+
+  for (let i = 0; i < 4; i++) {
+    const geometry = new BoxGeometry(1, 1, 1);
+    const material = new MeshBasicMaterial({ color: Math.random() * 0xffffff });
+    const cube = new Mesh(geometry, material);
+
+    cube.position.x = Math.random() * 10;
+    cube.position.y = Math.random() * 10;
+
+    scene.add(cube);
+
+    cubes.push(cube);
+  }
 
   camera.position.z = 5;
+
+  const speed = {
+    x: 0,
+    y: 0,
+  };
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      speed.x += 0.01;
+    }
+
+    if (event.key === "ArrowRight") {
+      speed.x -= 0.01;
+    }
+
+    if (event.key === "ArrowUp") {
+      speed.y += 0.01;
+    }
+
+    if (event.key === "ArrowDown") {
+      speed.y -= 0.01;
+    }
+  });
 
   function animate() {
     req(animate);
 
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+    // handle user input to update state
+    cubes.forEach((cube) => {
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
+    });
 
+    // allow physics to update state
+    speed.x *= 0.93;
+    speed.y *= 0.93;
+
+    camera.position.x += speed.x;
+    camera.position.y += speed.y;
+
+    // render
     renderer.render(scene, camera);
   }
 
