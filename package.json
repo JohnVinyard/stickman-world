@@ -11,9 +11,13 @@
   "dependencies": {
     "next": "12.3.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "three": "0.144.0",
+    "cannon": "0.6.2"
   },
   "devDependencies": {
+    "@types/three": "0.144.0",
+    "@types/cannon": "0.1.8",
     "@types/node": "18.7.16",
     "@types/react": "18.0.19",
     "@types/react-dom": "18.0.6",
